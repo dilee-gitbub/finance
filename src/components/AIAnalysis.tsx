@@ -29,12 +29,23 @@ export function AIAnalysis({ corpName, data }: AIAnalysisProps) {
 
       if (import.meta.env.DEV) {
         // 개발 환경에서는 Mock 분석 사용
-        const debtRatio = ((data.totalLiabilities / data.totalAssets) * 100).toFixed(1);
-        const equityRatio = ((data.totalEquity / data.totalAssets) * 100).toFixed(1);
-        const operatingMargin = ((data.operatingProfit / data.revenue) * 100).toFixed(1);
-        const netMargin = ((data.netProfit / data.revenue) * 100).toFixed(1);
-        const roe = ((data.netProfit / data.totalEquity) * 100).toFixed(1);
-        const roa = ((data.netProfit / data.totalAssets) * 100).toFixed(1);
+        if (!data) {
+          setError('데이터가 없습니다. 재무 데이터를 먼저 조회해주세요.');
+          setLoading(false);
+          return;
+        }
+
+        // 0으로 나누기 방지
+        const totalAssets = data.totalAssets || 1;
+        const revenue = data.revenue || 1;
+        const totalEquity = data.totalEquity || 1;
+
+        const debtRatio = ((data.totalLiabilities / totalAssets) * 100).toFixed(1);
+        const equityRatio = ((data.totalEquity / totalAssets) * 100).toFixed(1);
+        const operatingMargin = ((data.operatingProfit / revenue) * 100).toFixed(1);
+        const netMargin = ((data.netProfit / revenue) * 100).toFixed(1);
+        const roe = ((data.netProfit / totalEquity) * 100).toFixed(1);
+        const roa = ((data.netProfit / totalAssets) * 100).toFixed(1);
 
         let investmentRating = '⭐⭐⭐';
         let riskLevel = '중간';

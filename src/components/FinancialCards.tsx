@@ -14,8 +14,9 @@ interface CardProps {
 }
 
 function Card({ title, value, unit = '억 원', changePercent }: CardProps) {
-  const displayValue = Math.abs(value) > 1000 ? (value / 1000000).toFixed(1) : value.toFixed(0);
-  const displayUnit = Math.abs(value) > 1000 ? '조 원' : unit;
+  const numValue = Number(value) || 0;
+  const displayValue = Math.abs(numValue) > 1000 ? (numValue / 1000000).toFixed(1) : numValue.toFixed(0);
+  const displayUnit = Math.abs(numValue) > 1000 ? '조 원' : unit;
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">

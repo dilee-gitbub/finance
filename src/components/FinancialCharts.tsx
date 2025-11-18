@@ -101,9 +101,11 @@ export function FinancialCharts({ current, previous }: FinancialChartsProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, value, percent = 0 }) =>
-                  `${name}: ${(value as number).toFixed(0)}억 원 (${(percent * 100).toFixed(1)}%)`
-                }
+                label={({ name, value, percent = 0 }) => {
+                  const numValue = Number(value) || 0;
+                  const numPercent = Number(percent) || 0;
+                  return `${name}: ${numValue.toFixed(0)}억 원 (${(numPercent * 100).toFixed(1)}%)`;
+                }}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -113,7 +115,10 @@ export function FinancialCharts({ current, previous }: FinancialChartsProps) {
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value) => [`${(value as number).toFixed(0)}억 원`, '금액']}
+                formatter={(value) => {
+                  const numValue = Number(value) || 0;
+                  return [`${numValue.toFixed(0)}억 원`, '금액'];
+                }}
                 contentStyle={{
                   backgroundColor: '#1f2937',
                   border: '1px solid #374151',
@@ -138,12 +143,12 @@ export function FinancialCharts({ current, previous }: FinancialChartsProps) {
           </div>
           <div className="text-xl font-bold text-blue-900 dark:text-blue-100">
             {current.totalAssets > 0
-              ? ((current.totalLiabilities / current.totalAssets) * 100).toFixed(1)
+              ? (((current.totalLiabilities || 0) / current.totalAssets) * 100).toFixed(1)
               : '0'}
             %
           </div>
           <div className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-            {current.totalLiabilities > 0 ? '부채가 있음' : '무차입'}
+            {(current.totalLiabilities || 0) > 0 ? '부채가 있음' : '무차입'}
           </div>
         </div>
 
@@ -153,7 +158,7 @@ export function FinancialCharts({ current, previous }: FinancialChartsProps) {
           </div>
           <div className="text-xl font-bold text-green-900 dark:text-green-100">
             {current.revenue > 0
-              ? ((current.netProfit / current.revenue) * 100).toFixed(1)
+              ? (((current.netProfit || 0) / current.revenue) * 100).toFixed(1)
               : '0'}
             %
           </div>
@@ -168,7 +173,7 @@ export function FinancialCharts({ current, previous }: FinancialChartsProps) {
           </div>
           <div className="text-xl font-bold text-purple-900 dark:text-purple-100">
             {current.totalAssets > 0
-              ? ((current.totalEquity / current.totalAssets) * 100).toFixed(1)
+              ? (((current.totalEquity || 0) / current.totalAssets) * 100).toFixed(1)
               : '0'}
             %
           </div>
